@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+
+# IDE / editors
+.idea/
+.vscode/
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Job scheduler logs
+slurm-*.out
+*.log
+
+# Scratch / workdirs
+test_runs/
+run_*/
+
+# Machine-specific launchers (each user keeps their own)
+main*.py
+job*.sh
+
+# QE / Perturbo input & output artifacts
+*.*in
+*.*out

@@ -1,0 +1,75 @@
+# Dependency specification for all pipeline modes.
+#
+# Each mode that needs inputs from prior steps declares:
+#   files:   list of file-path templates
+#   folders: list of folder-path templates
+#   type:    'link' (os.symlink) or 'copy' (shutil.copy / shutil.copytree)
+#
+# Path templates are rendered via str.format with:
+#   - {prefix}    system prefix (e.g. 'al')
+#   - {workdir}   simulation working directory
+#   - {<custom>}  any extra variable passed via run(mode, custom=...)
+#
+# Convention: every dependency path has the form
+#   {workdir}/<step_name>/<rest>
+#
+# Modes not listed here have no dependencies (e.g. vc-relax, scf).
+
+# ---------- Quantum Espresso ----------
+
+nscf:
+  files: []
+  folders:
+    - '{workdir}/scf/tmp'
+  type: copy
+
+bands:
+  files: []
+  folders:
+    - '{workdir}/scf/tmp'
+  type: copy
+
+dos:
+  files: []
+  folders:
+    - '{workdir}/scf/tmp'
+  type: copy
+
+phonon:
+  files: []
+  folders:
+    - '{workdir}/scf/tmp'
+  type: copy
+
+wannier90:
+  files: []
+  folders:
+    - '{workdir}/nscf/tmp'
+  type: copy
+
+# ---------- Perturbo ----------
+
+qe2pert:
+  files:
+    - '{workdir}/wannier90/{prefix}_u.mat'
+    - '{workdir}/wannier90/{prefix}_u_dis.mat'
+    - '{workdir}/wannier90/{prefix}_centres.xyz'
+  folders:
+    - '{workdir}/nscf/tmp'
+    - '{workdir}/phonon/save'
+  type: link
+
+setup:
+  files:
+    - '{workdir}/qe2pert/{prefix}_epr.h5'
+  folders: []
+  type: link
+
+dynamics-run:
+  files:
+    - '{workdir}/qe2pert/{prefix}_epr.h5'
+    - '{workdir}/setup/{prefix}_tet.h5'
+    - '{workdir}/setup/{prefix}.temper'
+  folders: []
+  type: link
+

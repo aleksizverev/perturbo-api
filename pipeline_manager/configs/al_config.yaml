@@ -1,0 +1,111 @@
+crystal_structure:
+  symbols: 'Al'
+  scaled_positions: [[0.0, 0.0, 0.0]]
+  cell: [2.857, 2.857, 2.857, 60.0, 60.0, 60.0]
+  pseudopotentials:
+    Al: 'Al.pbe-n-rrkjus_psl.1.0.0.UPF'
+
+qe_setup:
+  base:
+    prefix: 'al'
+    pseudo_dir: '/scratch/djurabek/zvereval/materials_data/'
+    outdir: './tmp'
+    ecutwfc: 90
+    ecutrho: 810
+    occupations: 'smearing'
+    smearing: 'mv'
+    degauss: 0.01
+    conv_thr: 1.0e-10
+  vc-relax:
+    kpts: [8, 8, 8]
+    koffset: [0, 0, 0]
+    forc_conv_thr: 1.0e-8
+    etot_conv_thr: 1.0e-9
+    cell_dofree: 'all'
+  scf:
+    kpts: [8, 8, 8]
+    koffset: [0, 0, 0]
+  nscf:
+    kpts: [8, 8, 8]
+    koffset: [0, 0, 0]
+    nbnd: 25
+  phonon:
+    tr2_ph: 1.0e-14
+    fildyn: 'al.dyn.xml'
+    fildvscf: 'dvscf'
+    ldisp: true
+    nq: [8, 8, 8]
+  wannier90:
+    kgrid: [8, 8, 8]
+    num_wann: 16
+    num_bands: 25
+    num_iter: 4000
+    dis_win_min: -10.0
+    dis_win_max: 70.0
+    dis_froz_min: -10.0
+    dis_froz_max: 30.0
+    dis_num_iter: 4000
+    auto_projections: true
+    scdm_entanglement: 'erfc'
+    scdm_mu: 35.0
+    scdm_sigma: 10.0
+    write_u_matrices: true
+    write_xyz : true
+  pw2wannier90:
+    write_mmn: true
+    write_amn: true
+    write_unk: false
+    scdm_proj: true
+    scdm_entanglement: 'erfc'
+    scdm_mu: 35.0
+    scdm_sigma: 10.0
+
+perturbo_setup:
+  base:
+    prefix: 'al'
+  qe2pert:
+    outdir: './tmp'
+    phdir: './save'
+    nk1: 8
+    nk2: 8
+    nk3: 8
+    dft_band_min: 1
+    dft_band_max: 25
+    num_wann: 16
+    lwannier: true
+  setup:
+    boltz_kdim: [40, 40, 40]
+    boltz_qdim: [40, 40, 40]
+    boltz_emin: -10.0
+    boltz_emax: 70.0
+    band_min: 1
+    band_max: 25
+    ftemper: 'al.temper'
+    find_efermi: false
+  dynamics-run:
+    boltz_kdim: [40, 40, 40]
+    boltz_qdim: [40, 40, 40]
+    boltz_emin: -10.0
+    boltz_emax: 70.0
+    band_min: 1
+    band_max: 25
+    boltz_nstep: 50
+    output_nstep: 10
+    time_step: 0.05
+    boltz_init_dist: 'fermi'
+    solver: 'rk4'
+    boltz_norm_dist: true
+    delta_smear: 8.0
+    phfreq_cutoff: 1.0
+    load_scatter_eph: false
+    ftemper: 'al.temper'
+    tmp_dir: './tmp'
+  dynamics-pp:
+    boltz_kdim: [40, 40, 40]
+    boltz_qdim: [40, 40, 40]
+    boltz_emin: -10.0
+    boltz_emax: 70.0
+    band_min: 1
+    band_max: 25
+    ftemper: 'al.temper'
+    tmp_dir: './tmp'
