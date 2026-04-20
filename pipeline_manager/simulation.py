@@ -238,30 +238,30 @@ class PerturboSimulation(Simulation):
         base_dir = self.stage_dirs['dynamics-run']
         results = {}
 
-        for T, mu in electron_data.items():
-            t_dir = base_dir / f'T_{T:.0f}'
-            overrides = {
-                'boltz_init_smear': T * self.K_B_meV,
-                'boltz_init_e0': mu,
-            }
-
-            if eph_tmp is not None:
-                t_dir.mkdir(parents=True, exist_ok=True)
-                (t_dir / 'tmp').symlink_to(Path(eph_tmp))
-                overrides['load_scatter_eph'] = True
-
-            self.run('dynamics-run', custom_dir=t_dir, **overrides)
-
-            if eph_tmp is None:
-                eph_tmp = t_dir / 'tmp'
-
-            self.run('dynamics-pp', custom_dir=t_dir)
-            results[T] = self._compute_coupling(t_dir, T, lattice_temp)
-
-        results_path = self.workdir / f'{self.structure.prefix}-gresults.dat'
+        results_path = self.workdir / f'{self.structure.prefix}-gresults.txt'
         with open(results_path, 'w') as f:
-            for T, g in results.items():
-                f.write(f'{lattice_temp}  {T}  {g}\n')
+            for T, mu in electron_data.items():
+                t_dir = base_dir / f'T_{T:.0f}'
+                overrides = {
+                    'boltz_init_smear': T * self.K_B_meV,
+                    'boltz_init_e0': mu,
+                }
+
+                if eph_tmp is not None:
+                    t_dir.mkdir(parents=True, exist_ok=True)
+                    (t_dir / 'tmp').symlink_to(Path(eph_tmp))
+                    overrides['load_scatter_eph'] = True
+
+                self.run('dynamics-run', custom_dir=t_dir, **overrides)
+
+                if eph_tmp is None:
+                    eph_tmp = t_dir / 'tmp'
+
+                self.run('dynamics-pp', custom_dir=t_dir)
+                results[T] = self._compute_coupling(t_dir, T, lattice_temp)
+
+                f.write(f'{lattice_temp}  {T}  {results[T]}\n')
+                f.flush()
 
         return results
 
