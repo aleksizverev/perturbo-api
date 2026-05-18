@@ -1,3 +1,4 @@
+import os
 import subprocess
 import shutil
 import shlex
@@ -36,6 +37,12 @@ class Simulation:
         if stage_name not in self._executables:
             raise RuntimeError(f'No executable registered for mode {stage_name!r}')
 
+    def _resolve_symlink_target(self, src: Union[str, Path], anchor: Path) -> Path:
+        src = Path(src).resolve()
+        if self.workdir in src.parents or src == self.workdir:
+            return Path(os.path.relpath(src, anchor))
+        return src
+
     def _stage_dependencies(self, stage_name: str, dest: Path, **custom_params):
         spec = self._dependencies.get(stage_name)
         if not spec:
@@ -50,7 +57,7 @@ class Simulation:
                 src = Path(path_str.format(**fmt))
                 dst = dest / src.name
                 if is_link:
-                    dst.symlink_to(src)
+                    dst.symlink_to(self._resolve_symlink_target(src, dest))
                 elif is_dir:
                     shutil.copytree(src, dst, dirs_exist_ok=True)
                 else:
@@ -249,7 +256,7 @@ class PerturboSimulation(Simulation):
 
                 if eph_tmp is not None:
                     t_dir.mkdir(parents=True, exist_ok=True)
-                    (t_dir / 'tmp').symlink_to(Path(eph_tmp))
+                    (t_dir / 'tmp').symlink_to(self._resolve_symlink_target(eph_tmp, t_dir))
                     overrides['load_scatter_eph'] = True
 
                 self.run('dynamics-run', custom_dir=t_dir, **overrides)
