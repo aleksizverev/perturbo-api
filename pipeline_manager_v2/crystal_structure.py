@@ -1,7 +1,8 @@
 from ase import Atoms
+from ase.io import read
 
 
-class SimulationSystem:
+class CrystalStructure:
     def __init__(self, cfg: dict, prefix: str):
         self.prefix = prefix
         self.atoms = Atoms(
@@ -16,3 +17,6 @@ class SimulationSystem:
 
     def update_geometry(self, new_atoms: Atoms):
         self.atoms = new_atoms
+
+    def load_relaxed(self, filepath):
+        self.update_geometry(read(filepath))

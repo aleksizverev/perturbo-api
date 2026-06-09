@@ -8,7 +8,7 @@ crystal_structure:
 qe_setup:
   base:
     prefix: 'al'
-    pseudo_dir: '/scratch/djurabek/zvereval/materials_data/'
+    pseudo_dir: '/home/azverev/ep-coupling/materials_data/pseudo'
     outdir: './tmp'
     ecutwfc: 90
     ecutrho: 810
@@ -74,8 +74,8 @@ perturbo_setup:
     num_wann: 16
     lwannier: true
   setup:
-    boltz_kdim: [40, 40, 40]
-    boltz_qdim: [40, 40, 40]
+    boltz_kdim: [60, 60, 60]
+    boltz_qdim: [60, 60, 60]
     boltz_emin: -10.0
     boltz_emax: 70.0
     band_min: 1
@@ -83,26 +83,26 @@ perturbo_setup:
     ftemper: 'al.temper'
     find_efermi: false
   dynamics-run:
-    boltz_kdim: [40, 40, 40]
-    boltz_qdim: [40, 40, 40]
+    boltz_kdim: [60, 60, 60]
+    boltz_qdim: [60, 60, 60]
     boltz_emin: -10.0
     boltz_emax: 70.0
     band_min: 1
     band_max: 25
     boltz_nstep: 50
-    output_nstep: 10
-    time_step: 0.05
+    output_nstep: 5
+    time_step: 5.0
     boltz_init_dist: 'fermi'
     solver: 'rk4'
     boltz_norm_dist: true
     delta_smear: 8.0
     phfreq_cutoff: 1.0
-    load_scatter_eph: false
+    load_scatter_eph: true
     ftemper: 'al.temper'
     tmp_dir: './tmp'
   dynamics-pp:
-    boltz_kdim: [40, 40, 40]
-    boltz_qdim: [40, 40, 40]
+    boltz_kdim: [60, 60, 60]
+    boltz_qdim: [60, 60, 60]
     boltz_emin: -10.0
     boltz_emax: 70.0
     band_min: 1

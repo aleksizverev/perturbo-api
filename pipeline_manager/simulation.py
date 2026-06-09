@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import List, Optional, Union
 from scipy.integrate import trapezoid
 from ase.io import read
-from .crystal_structure import SimulationSystem
+from pipeline_manager_v2.crystal_structure import CrystalStructure
 
 
 class Simulation:
@@ -17,7 +17,7 @@ class Simulation:
     _dependencies = {}
     _mpirun_template = '{mpirun} -n {num_cores} {bin_dir}/{executable} -i {input}'
 
-    def __init__(self, cfg: dict, workdir: Union[str, Path], structure: 'SimulationSystem',
+    def __init__(self, cfg: dict, workdir: Union[str, Path], structure: 'CrystalStructure',
                  input_generator: 'InputGenerator', pipeline: List[str]):
         self.cfg = cfg
         self.workdir = Path(workdir).resolve()
@@ -295,7 +295,7 @@ class PerturboSimulation(Simulation):
 
         with h5py.File(popu_path, 'r') as f:
             energy = f['energy_grid_ev'][:]
-            popu_t2 = f['energy_distribution/popu_t2'][:]
+            popu_t2 = f['energy_distribution/popu_t9'][:]
             popu_t1 = f['energy_distribution/popu_t1'][:]
             times = f['times_fs'][:]
 

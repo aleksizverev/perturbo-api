@@ -4,11 +4,11 @@ from pathlib import Path
 from typing import Any, List, Tuple
 from ase.io import write
 from ase.io.espresso import write_espresso_ph
-from .crystal_structure import SimulationSystem
+from .crystal_structure import CrystalStructure
 
 
 class InputGenerator:
-    def __init__(self, structure: SimulationSystem, cfg: dict):
+    def __init__(self, structure: CrystalStructure, cfg: dict):
         self.structure = structure
         self.cfg = cfg
         self.prefix = self.structure.prefix
@@ -33,7 +33,7 @@ class InputGenerator:
 
 
 class QEInputGenerator(InputGenerator):
-    def __init__(self, structure: SimulationSystem, cfg: dict):
+    def __init__(self, structure: CrystalStructure, cfg: dict):
         super().__init__(structure, cfg)
         self._dispatch_map = {
             'vc-relax': self.generate_pw,
@@ -85,7 +85,7 @@ class QEInputGenerator(InputGenerator):
 
 
 class W90InputGenerator(InputGenerator):
-    def __init__(self, structure: SimulationSystem, cfg: dict):
+    def __init__(self, structure: CrystalStructure, cfg: dict):
         super().__init__(structure, cfg)
         self._dispatch_map = {
             'wannier90': self.generate_wannier90,

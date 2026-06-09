@@ -8,7 +8,7 @@ crystal_structure:
 qe_setup:
   base:
     prefix: 'al'
-    pseudo_dir: '/Users/azverev/Documents/04_research/ep_coupling/data/pseudopotentials/pseudo'
+    pseudo_dir: '/Users/azverev/Documents/04_research/ep_coupling/pseudopotentials/'
     outdir: './tmp'
     ecutwfc: 30
     ecutrho: 270
