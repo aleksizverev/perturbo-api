@@ -29,6 +29,7 @@ slurm-*.out
 # Scratch / workdirs
 test_runs/
 run_*/
+configs/
 
 # Machine-specific launchers (each user keeps their own)
 main*.py

@@ -14,6 +14,7 @@ class CrystalStructure:
         self.pseudopotentials = cfg['pseudopotentials']
         self.lattice_temp = None
         self.electron_temps = None
+        self.efermi = None
 
     def update_geometry(self, new_atoms: Atoms):
         self.atoms = new_atoms

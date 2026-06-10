@@ -1,6 +1,5 @@
 import shutil
 from pathlib import Path
-
 from ase.io import read
 
 from .crystal_structure import CrystalStructure
@@ -40,10 +39,13 @@ def collect_ph(module_dir: Path, structure: CrystalStructure):
             )
         i += 1
 
-
 def parse_temper(filepath: Path, structure: CrystalStructure) -> dict:
     with open(filepath) as f:
         lines = f.readlines()
     n = int(lines[0].strip())
     mus = [float(line.split()[1]) for line in lines[1:n + 1]]
     return dict(zip(structure.electron_temps, mus))
+
+def get_fermi_level(filepath):
+    atoms = read(filepath)
+    return atoms.calc.get_fermi_level()

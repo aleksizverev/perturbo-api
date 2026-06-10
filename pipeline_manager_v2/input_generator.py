@@ -180,6 +180,10 @@ class PerturboInputGenerator(InputGenerator):
                 self._write_fortran_namelist(f, k, v)
             f.write('/\n')
 
+        if stage_name == "setup":
+            self.generate_temper(work_dir, [(self.structure.lattice_temp,
+                                             self.structure.efermi, 0.0)])
+
     def generate_temper(self, work_dir: Path, temp_mu_pairs: List[Tuple[float, float, float]]):
         filepath = work_dir / f'{self.prefix}.temper'
         with open(filepath, 'w') as f:

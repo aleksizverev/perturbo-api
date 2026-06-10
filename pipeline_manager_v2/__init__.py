@@ -5,4 +5,6 @@ from .input_generator import (
     W90InputGenerator,
     PerturboInputGenerator,
 )
-from .simulation import Simulation, Module, Dependency
+from .simulation import Simulation
+from .module import Module, Dependency
+from .runners import QERunner, W90Runner, PerturboRunner

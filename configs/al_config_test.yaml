@@ -8,7 +8,7 @@ crystal_structure:
 qe_setup:
   base:
     prefix: 'al'
-    pseudo_dir: '/Users/azverev/Documents/04_research/ep_coupling/pseudopotentials/'
+    pseudo_dir: '/scratch/djurabek/zvereval/materials_data'
     outdir: './tmp'
     ecutwfc: 30
     ecutrho: 270
@@ -34,7 +34,7 @@ qe_setup:
     fildyn: 'al.dyn.xml'
     fildvscf: 'dvscf'
     ldisp: true
-    nq: [2, 2, 2]
+    nq: [4, 4, 4]
   wannier90:
     kgrid: [4, 4, 4]
     num_wann: 16
@@ -66,16 +66,16 @@ perturbo_setup:
   qe2pert:
     outdir: './tmp'
     phdir: './save'
-    nk1: 8
-    nk2: 8
-    nk3: 8
+    nk1: 4
+    nk2: 4
+    nk3: 4
     dft_band_min: 1
     dft_band_max: 25
     num_wann: 16
     lwannier: true
   setup:
-    boltz_kdim: [40, 40, 40]
-    boltz_qdim: [40, 40, 40]
+    boltz_kdim: [20, 20, 20]
+    boltz_qdim: [20, 20, 20]
     boltz_emin: -10.0
     boltz_emax: 70.0
     band_min: 1
@@ -83,15 +83,15 @@ perturbo_setup:
     ftemper: 'al.temper'
     find_efermi: false
   dynamics-run:
-    boltz_kdim: [40, 40, 40]
-    boltz_qdim: [40, 40, 40]
+    boltz_kdim: [20, 20, 20]
+    boltz_qdim: [20, 20, 20]
     boltz_emin: -10.0
     boltz_emax: 70.0
     band_min: 1
     band_max: 25
     boltz_nstep: 50
-    output_nstep: 10
-    time_step: 0.05
+    output_nstep: 5
+    time_step: 5.0
     boltz_init_dist: 'fermi'
     solver: 'rk4'
     boltz_norm_dist: true
@@ -101,8 +101,8 @@ perturbo_setup:
     ftemper: 'al.temper'
     tmp_dir: './tmp'
   dynamics-pp:
-    boltz_kdim: [40, 40, 40]
-    boltz_qdim: [40, 40, 40]
+    boltz_kdim: [20, 20, 20]
+    boltz_qdim: [20, 20, 20]
     boltz_emin: -10.0
     boltz_emax: 70.0
     band_min: 1
