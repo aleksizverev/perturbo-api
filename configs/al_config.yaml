@@ -1,32 +1,25 @@
-crystal_structure:
-  symbols: 'Al'
-  scaled_positions: [[0.0, 0.0, 0.0]]
-  cell: [2.857, 2.857, 2.857, 60.0, 60.0, 60.0]
-  pseudopotentials:
-    Al: 'Al.pbe-n-rrkjus_psl.1.0.0.UPF'
-
 qe_setup:
   base:
     prefix: 'al'
-    pseudo_dir: '/Users/azverev/Documents/04_research/ep_coupling/data/pseudopotentials/pseudo'
+    pseudo_dir: '../../pseudos'
     outdir: './tmp'
-    ecutwfc: 30
-    ecutrho: 270
+    ecutwfc: 90
+    ecutrho: 810
     occupations: 'smearing'
     smearing: 'mv'
     degauss: 0.01
     conv_thr: 1.0e-10
   vc-relax:
-    kpts: [4, 4, 4]
+    kpts: [8, 8, 8]
     koffset: [0, 0, 0]
     forc_conv_thr: 1.0e-8
     etot_conv_thr: 1.0e-9
     cell_dofree: 'all'
   scf:
-    kpts: [4, 4, 4]
+    kpts: [8, 8, 8]
     koffset: [0, 0, 0]
   nscf:
-    kpts: [4, 4, 4]
+    kpts: [8, 8, 8]
     koffset: [0, 0, 0]
     nbnd: 25
   phonon:
@@ -34,9 +27,9 @@ qe_setup:
     fildyn: 'al.dyn.xml'
     fildvscf: 'dvscf'
     ldisp: true
-    nq: [2, 2, 2]
+    nq: [8, 8, 8]
   wannier90:
-    kgrid: [4, 4, 4]
+    kgrid: [8, 8, 8]
     num_wann: 16
     num_bands: 25
     num_iter: 4000
@@ -74,8 +67,8 @@ perturbo_setup:
     num_wann: 16
     lwannier: true
   setup:
-    boltz_kdim: [40, 40, 40]
-    boltz_qdim: [40, 40, 40]
+    boltz_kdim: [60, 60, 60]
+    boltz_qdim: [60, 60, 60]
     boltz_emin: -10.0
     boltz_emax: 70.0
     band_min: 1
@@ -83,26 +76,26 @@ perturbo_setup:
     ftemper: 'al.temper'
     find_efermi: false
   dynamics-run:
-    boltz_kdim: [40, 40, 40]
-    boltz_qdim: [40, 40, 40]
+    boltz_kdim: [60, 60, 60]
+    boltz_qdim: [60, 60, 60]
     boltz_emin: -10.0
     boltz_emax: 70.0
     band_min: 1
     band_max: 25
     boltz_nstep: 50
-    output_nstep: 10
-    time_step: 0.05
+    output_nstep: 5
+    time_step: 5.0
     boltz_init_dist: 'fermi'
     solver: 'rk4'
     boltz_norm_dist: true
     delta_smear: 8.0
     phfreq_cutoff: 1.0
-    load_scatter_eph: false
+    load_scatter_eph: true
     ftemper: 'al.temper'
     tmp_dir: './tmp'
   dynamics-pp:
-    boltz_kdim: [40, 40, 40]
-    boltz_qdim: [40, 40, 40]
+    boltz_kdim: [60, 60, 60]
+    boltz_qdim: [60, 60, 60]
     boltz_emin: -10.0
     boltz_emax: 70.0
     band_min: 1

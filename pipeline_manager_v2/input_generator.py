@@ -4,11 +4,11 @@ from pathlib import Path
 from typing import Any, List, Tuple
 from ase.io import write
 from ase.io.espresso import write_espresso_ph
-from .crystal_structure import SimulationSystem
+from .crystal_structure import CrystalStructure
 
 
 class InputGenerator:
-    def __init__(self, structure: SimulationSystem, cfg: dict):
+    def __init__(self, structure: CrystalStructure, cfg: dict):
         self.structure = structure
         self.cfg = cfg
         self.prefix = self.structure.prefix
@@ -33,7 +33,7 @@ class InputGenerator:
 
 
 class QEInputGenerator(InputGenerator):
-    def __init__(self, structure: SimulationSystem, cfg: dict):
+    def __init__(self, structure: CrystalStructure, cfg: dict):
         super().__init__(structure, cfg)
         self._dispatch_map = {
             'vc-relax': self.generate_pw,
@@ -85,7 +85,7 @@ class QEInputGenerator(InputGenerator):
 
 
 class W90InputGenerator(InputGenerator):
-    def __init__(self, structure: SimulationSystem, cfg: dict):
+    def __init__(self, structure: CrystalStructure, cfg: dict):
         super().__init__(structure, cfg)
         self._dispatch_map = {
             'wannier90': self.generate_wannier90,
@@ -165,6 +165,7 @@ class PerturboInputGenerator(InputGenerator):
 
     def generate(self, stage_name: str, work_dir: Path, **overrides):
         mode_cfg = {**self.cfg.get(stage_name, {}), **overrides}
+        temper = mode_cfg.pop('temper', None)   # written as a separate file, not a namelist key
         namespace = 'perturbo' if stage_name in self._perturbo_modules else 'qe2pert'
 
         filepath = work_dir / f'{stage_name}.{self.prefix}.in'
@@ -179,6 +180,9 @@ class PerturboInputGenerator(InputGenerator):
             for k, v in mode_cfg.items():
                 self._write_fortran_namelist(f, k, v)
             f.write('/\n')
+
+        if temper is not None:
+            self.generate_temper(work_dir, temper)
 
     def generate_temper(self, work_dir: Path, temp_mu_pairs: List[Tuple[float, float, float]]):
         filepath = work_dir / f'{self.prefix}.temper'
