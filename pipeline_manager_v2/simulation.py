@@ -12,18 +12,21 @@ class Simulation:
         self.modules: dict[str, Module] = {}
 
     def add_module(self, name: str,
-                   dependencies: Optional[List[Dependency]] = None) -> Module:
+                   dependencies: Optional[List[Dependency]] = None,
+                   stage: Optional[str] = None) -> Module:
         module = Module(name, self.sim_dir / name)
+        module.stage_name = stage or name
         if dependencies:
             module.add_dependencies(dependencies)
         self.modules[name] = module
         return module
 
-    def run(self, module_name: str, runner):
+    def run(self, module_name: str, runner, stage=None, needs_dir=True, **overrides):
         module = self.modules.get(module_name)
         if module is None:
             raise RuntimeError(f"Module {module_name} is not registered.")
 
-        module.module_dir.mkdir(parents=True, exist_ok=False)
+        if needs_dir:
+            module.module_dir.mkdir(parents=True, exist_ok=False)
         module.resolve_dependencies()
-        runner.execute(module, self.crystal_structure)
+        runner.execute(module, self.crystal_structure, stage=stage, **overrides)

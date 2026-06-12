@@ -1,5 +1,7 @@
 import shutil
 from pathlib import Path
+
+import yaml
 from ase.io import read
 
 from .crystal_structure import CrystalStructure
@@ -49,3 +51,8 @@ def parse_temper(filepath: Path, structure: CrystalStructure) -> dict:
 def get_fermi_level(filepath):
     atoms = read(filepath)
     return atoms.calc.get_fermi_level()
+
+def read_carrier(setup_yml: Path) -> float:
+    with open(setup_yml) as f:
+        data = yaml.safe_load(f)
+    return data['carrier density']['configuration index'][1]['concentration']

@@ -165,6 +165,7 @@ class PerturboInputGenerator(InputGenerator):
 
     def generate(self, stage_name: str, work_dir: Path, **overrides):
         mode_cfg = {**self.cfg.get(stage_name, {}), **overrides}
+        temper = mode_cfg.pop('temper', None)   # written as a separate file, not a namelist key
         namespace = 'perturbo' if stage_name in self._perturbo_modules else 'qe2pert'
 
         filepath = work_dir / f'{stage_name}.{self.prefix}.in'
@@ -180,9 +181,8 @@ class PerturboInputGenerator(InputGenerator):
                 self._write_fortran_namelist(f, k, v)
             f.write('/\n')
 
-        if stage_name == "setup":
-            self.generate_temper(work_dir, [(self.structure.lattice_temp,
-                                             self.structure.efermi, 0.0)])
+        if temper is not None:
+            self.generate_temper(work_dir, temper)
 
     def generate_temper(self, work_dir: Path, temp_mu_pairs: List[Tuple[float, float, float]]):
         filepath = work_dir / f'{self.prefix}.temper'

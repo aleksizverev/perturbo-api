@@ -3,15 +3,10 @@ from ase.io import read
 
 
 class CrystalStructure:
-    def __init__(self, cfg: dict, prefix: str):
+    def __init__(self, atoms: Atoms, prefix: str, pseudopotentials: dict):
+        self.atoms = atoms
         self.prefix = prefix
-        self.atoms = Atoms(
-            symbols=cfg['symbols'],
-            scaled_positions=cfg['scaled_positions'],
-            cell=cfg['cell'],
-            pbc=True
-        )
-        self.pseudopotentials = cfg['pseudopotentials']
+        self.pseudopotentials = pseudopotentials
         self.lattice_temp = None
         self.electron_temps = None
         self.efermi = None

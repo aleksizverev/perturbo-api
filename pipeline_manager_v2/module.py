@@ -15,6 +15,7 @@ class Module:
     def __init__(self, name: str, module_dir: Path):
         self.name: str = name
         self.module_dir: Path = module_dir
+        self.stage_name: str = name   # what generate()/filenames use; dir uses name
         self.dependencies: List[Dependency] = []
 
     def add_dependencies(self, new_dependencies: List[Dependency]):
@@ -28,11 +29,10 @@ class Module:
                 raise RuntimeError(
                     f"Cannot proceed. Missing dependency: {dependency.target_path}")
 
-            # check if dependency file already exists in current directory
+            # skip if already linked (e.g. a follow-up stage in the same dir)
             destination = self.module_dir / dependency.target_path.name
             if destination.exists():
-                raise RuntimeError(
-                    f"Dependency {destination.name} already exists. Remove the target for rerun.")
+                continue
 
             # resolve module based on the type of connection (link/copy)
             if dependency.uses_symlink:
